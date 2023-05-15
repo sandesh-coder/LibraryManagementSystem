@@ -131,6 +131,24 @@ export const signOut = async (req, res) => {
     }
 };
 
+export const getMyProfile = async (req, res) => {
+    try {
+        const student = await Student.findById(req.student._id);
+
+        sendToken(
+            res,
+            student,
+            200,
+            `welcome back ${student.first_name}`,
+        );
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
 export const addtask = async (req, res) => {
     try {
         const { title, description } = req.body;
@@ -198,23 +216,6 @@ export const updateTask = async (req, res) => {
     }
 };
 
-export const getMyProfile = async (req, res) => {
-    try {
-        const user = await User.findById(req.user._id);
-
-        sendToken(
-            res,
-            user,
-            201,
-            `welcome back ${user.name}`,
-        );
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        });
-    }
-};
 
 export const updateProfile = async (req, res) => {
     try {

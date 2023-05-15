@@ -11,6 +11,7 @@ export const sendToken = (res, student, statusCode, message) =>{
         _id: student._id,
         name: `${student.first_name +` `+ student.last_name}`,
         email: student.email,
+        mobile: student.mobile,
         verified: student.verified,
     }
 
