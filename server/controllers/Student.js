@@ -57,21 +57,21 @@ export const verify = async (req, res) => {
 
         const otp = Number(req.body.otp);
 
-        const user = await User.findById(req.user._id);
+        const student = await Student.findById(req.student._id);
 
-        if (user.otp !== otp || user.otp_expiry < Date.now()) {
+        if (student.otp !== otp || student.otp_expiry < Date.now()) {
             return res
                 .status(400)
                 .json({ success: false, message: "Invalid OTP or has been Expired" });
         }
 
-        user.verified = true;
-        user.otp = null;
-        user.otp_expiry = null;
+        student.verified = true;
+        student.otp = null;
+        student.otp_expiry = null;
 
-        await user.save();
+        await student.save();
 
-        sendToken(res, user, 200, "Account Verified");
+        sendToken(res, student, 200, "Account Verified");
     } catch (error) {
         res.status(500).json({
             success: false,
@@ -80,7 +80,7 @@ export const verify = async (req, res) => {
     }
 }
 
-export const login = async (req, res) => {
+export const signIn = async (req, res) => {
     try {
         const { email, password } = req.body;
 
@@ -90,16 +90,16 @@ export const login = async (req, res) => {
                 .json({ success: false, message: "Please enter all fields" });
         }
 
-        const user = await User.findOne({ email }).select("+password");
+        const student = await Student.findOne({ email }).select("+password");
 
-        if (!user) {
+        if (!student) {
             return res.status(400).json({
                 success: false,
                 message: "Invalid Email or Password",
             });
         }
 
-        const isMatch = await user.comparePassword(password);
+        const isMatch = await student.comparePassword(password);
 
         if (!isMatch) {
             return res.status(400).json({
@@ -108,7 +108,7 @@ export const login = async (req, res) => {
             });
         }
 
-        sendToken(res, user, 200, "Login Successful");
+        sendToken(res, student, 200, "Login Successful");
 
     } catch (error) {
         res.status(500).json({
@@ -118,7 +118,7 @@ export const login = async (req, res) => {
     }
 }
 
-export const logout = async (req, res) => {
+export const signOut = async (req, res) => {
     try {
         res.status(200).cookie("token", null, {
             expires: new Date(Date.now()),
