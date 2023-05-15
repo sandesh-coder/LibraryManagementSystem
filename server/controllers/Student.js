@@ -149,6 +149,54 @@ export const getMyProfile = async (req, res) => {
     }
 };
 
+//update profile
+export const updateProfile = async (req, res) => {
+    try {
+        const student = await Student.findById(req.student._id);
+
+        const { first_name, last_name, email, mobile } = req.body;
+        // const avatar = req.files.avatar.tempFilePath;
+        // console.log(avatar);
+        if (first_name) {
+            student.first_name = first_name;
+        }
+        if(last_name) {
+            student.last_name = last_name;
+        }
+        if(email){
+            student.email = email;
+        }
+        if(mobile){
+            student.mobile = mobile;
+        }
+
+        // if (avatar) {
+        //     await cloudinary.v2.uploader.destroy(user.avatar.public_id);
+
+        //     const mycloud = await cloudinary.v2.uploader.upload(avatar,{
+        //         folder: "todoApp",
+        //     });
+
+        //     fs.rmSync("./tmp",{ recursive: true });
+
+        //     user.avatar = {
+        //         public_id: mycloud.public_id,
+        //         url: mycloud.secure_url,
+        //     }
+        // }
+        await student.save();
+        res
+            .status(200)
+            .json({ success: true, message: "Profile Updated successfully" });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
 export const addtask = async (req, res) => {
     try {
         const { title, description } = req.body;
@@ -216,44 +264,6 @@ export const updateTask = async (req, res) => {
     }
 };
 
-
-export const updateProfile = async (req, res) => {
-    try {
-        const user = await User.findById(req.user._id);
-
-        const { name } = req.body;
-        const avatar = req.files.avatar.tempFilePath;
-        console.log(avatar);
-        if (name) {
-            user.name = name;
-        }
-
-        if (avatar) {
-            await cloudinary.v2.uploader.destroy(user.avatar.public_id);
-
-            const mycloud = await cloudinary.v2.uploader.upload(avatar,{
-                folder: "todoApp",
-            });
-
-            fs.rmSync("./tmp",{ recursive: true });
-
-            user.avatar = {
-                public_id: mycloud.public_id,
-                url: mycloud.secure_url,
-            }
-        }
-        await user.save();
-        res
-            .status(200)
-            .json({ success: true, message: "Profile Updated successfully" });
-
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        });
-    }
-};
 
 export const updatePassword = async (req, res) => {
     try {
