@@ -1,6 +1,6 @@
-import { Student } from "../models/student.js";
-import { sendMail } from "../utils/sendMail.js";
-import { sendToken } from "../utils/sendToken.js";
+import { Student } from "../../models/student.js";
+import { sendMail } from "../../utils/sendMail.js";
+import { sendToken } from "../../utils/sendToken.js";
 
 
 export const signUp = async (req, res) => {

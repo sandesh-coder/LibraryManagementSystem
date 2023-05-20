@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors"
 import cookieParser from "cookie-parser";
-import Student from "./routes/Student.js"
+import Student from "./routes/student/Student.js"
 
 export const app = express();
 app.use(express.json());
